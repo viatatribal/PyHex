@@ -26,9 +26,11 @@ def dfs(visited, graph, node):
         for neighbour in graph[node]:
             dfs(visited, graph, neighbour)
 
-#  add nodes to the graph
-def addNodes():
-    pass
+
+def addNodes(pos, node):
+    """Connect two nodes in a graph."""
+    graph[pos].append(node)
+    graph[node].append(pos)
 
 
 def genNeighbour(pos):
@@ -67,4 +69,3 @@ def setPosition(x,y, player):
     graph[player].append(pos)
     if pos not in graph:
         graph[pos] = []
-
