@@ -109,3 +109,23 @@ def setPosition(x,y,player):
     checkNeighbour(pos, genNeighbour(pos), player)
 
 
+# this function exists only until I use pygame
+def game():
+    players = ['p1', 'p2']
+    i = 0
+    running = True
+    while running:
+        x = int(input("Enter x position: "))
+        y = int(input("Enter y position: "))
+        setPosition(x,y,players[i])
+        for n in graph[players[i]]:
+            if dfs(n, players[i]):
+                print(players[i] + " win!")
+                print(pieces)
+                print(graph)
+                print(board)
+                running = False
+                break
+        i = (i+1) % 2
+
+game()
