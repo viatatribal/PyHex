@@ -14,7 +14,7 @@ pieces = {
 }
 
 # size of board
-N = 2
+N = 3
 # The board game is represented by a matrix nxn
 board = [[0 for i in range(N)] for i in range(N)]
 
@@ -23,14 +23,35 @@ leftboard = [i*N+1 for i in range(1,N-1)]
 # all positions in the right side of the board ignoring the first and last one
 rightboard = [i*N for i in range(2,N)]
 
-# dfs function
-visited = set()
-def dfs(visited, graph, node):
-    if node not in visited:
-        print(node)
-        visited.add(node)
-        for neighbour in graph[node]:
-            dfs(visited, graph, neighbour)
+# positions to check if any of the players won the game
+p1winpos = [i*N for i in range(1,N+1)]
+p2winpos = [(N-1)*N+i for i in range(1,N+1)]
+
+
+def winGame(node, player):
+    """Check if any of the players won the game."""
+    if player == 'p1' and node in p1winpos:
+        return True
+    elif node in p2winpos:
+        return True
+    else:
+        return False
+
+
+def dfs(node, player):
+    """Depth-first search algorithm to check if any of the players connected their sides."""
+    visited = set()
+    stack = [node]
+    while stack:
+        n = stack.pop()
+        if n not in visited:
+            visited.add(node)
+        else:
+            continue
+        if winGame(n, player):
+            return player + " win!"
+        for neighbour in graph[n]:
+                stack.append(neighbour)
 
 
 def addNodes(pos, node):
@@ -61,14 +82,14 @@ def genNeighbour(pos):
     else:                                           # all other positions
         return [pos-N, pos-N+1, pos-1, pos+1, pos+N-1, pos+N]
 
-# check the neighbour of a position
-# so we can add it to the graph
+
 def checkNeighbour(pos, neighbours, player):
     """We check if any of the pos's neighbours is in the graph, if so we
        connect their edges as long as they are from the same player."""
     for n in neighbours:
         if n in graph and n in pieces[player]:
             addNodes(pos, n)
+
 
 # set position in board
 def setPosition(x,y, player):
@@ -78,5 +99,4 @@ def setPosition(x,y, player):
     if pos not in graph:
         graph[pos] = []
     checkNeighbour(pos, genNeighbour(pos), player)
-
 
