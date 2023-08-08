@@ -3,8 +3,14 @@
 
 # Graph to represent each player
 graph = {
-    'p1' : [],
-    'p2' : []
+    'p1': [],
+    'p2': []
+}
+
+# a dictionary that check if a piece belongs to player 1 or player 2
+pieces = {
+    'p1': [],
+    'p2': []
 }
 
 # size of board
@@ -57,18 +63,20 @@ def genNeighbour(pos):
 
 # check the neighbour of a position
 # so we can add it to the graph
-def checkNeighbour(pos, neighbours):
+def checkNeighbour(pos, neighbours, player):
     """We check if any of the pos's neighbours is in the graph, if so we
-       connect their edges."""
+       connect their edges as long as they are from the same player."""
     for n in neighbours:
-        if n in graph:
+        if n in graph and n in pieces[player]:
             addNodes(pos, n)
 
 # set position in board
 def setPosition(x,y, player):
     pos = x*N + y + 1
     board[x][y] = pos
-    graph[player].append(pos)
+    pieces[player].append(pos)
     if pos not in graph:
         graph[pos] = []
-    checkNeighbour(pos, genNeighbour(pos))
+    checkNeighbour(pos, genNeighbour(pos), player)
+
+
