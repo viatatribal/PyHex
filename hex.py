@@ -57,10 +57,12 @@ def genNeighbour(pos):
 
 # check the neighbour of a position
 # so we can add it to the graph
-def checkNeighbour(x,y, neighbour):
-    for n in neighbour:
-        pass
-
+def checkNeighbour(pos, neighbours):
+    """We check if any of the pos's neighbours is in the graph, if so we
+       connect their edges."""
+    for n in neighbours:
+        if n in graph:
+            addNodes(pos, n)
 
 # set position in board
 def setPosition(x,y, player):
@@ -69,3 +71,4 @@ def setPosition(x,y, player):
     graph[player].append(pos)
     if pos not in graph:
         graph[pos] = []
+    checkNeighbour(pos, genNeighbour(pos))
