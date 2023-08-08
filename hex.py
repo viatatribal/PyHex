@@ -14,7 +14,7 @@ pieces = {
 }
 
 # size of board
-N = 3
+N = 2
 # The board game is represented by a matrix nxn
 board = [[0 for i in range(N)] for i in range(N)]
 
@@ -45,13 +45,14 @@ def dfs(node, player):
     while stack:
         n = stack.pop()
         if n not in visited:
-            visited.add(node)
-        else:
+            visited.add(n)
+        elif n in visited:
             continue
         if winGame(n, player):
-            return player + " win!"
+            return True
         for neighbour in graph[n]:
                 stack.append(neighbour)
+    return False
 
 
 def addNodes(pos, node):
@@ -91,12 +92,20 @@ def checkNeighbour(pos, neighbours, player):
             addNodes(pos, n)
 
 
-# set position in board
-def setPosition(x,y, player):
+def setPosition(x,y,player):
+    """Set the pieces for each player, then update the pieces owner per player
+       and update nodes connections."""
     pos = x*N + y + 1
     board[x][y] = pos
     pieces[player].append(pos)
+    # here we check if player 1 placed any piece in the left column
+    if (pos-1) % N == 0 and player == 'p1':
+        graph['p1'].append(pos)
+    # or if the player 2 placed any piece in the first row
+    if x == 0 and player == 'p2':
+        graph['p2'].append(pos)
     if pos not in graph:
         graph[pos] = []
     checkNeighbour(pos, genNeighbour(pos), player)
+
 
